@@ -22,10 +22,10 @@ while i < len(columnList):
     clearData[columnList[i]] = pd.to_numeric(clearData[columnList[i]], errors='coerce')
     i+=1
 
-clearData["district"] = clearData["DBN"].str[:3]
-clearData["DBN2"] = clearData["DBN"].str[3:6]
-clearData["borough"] = clearData["DBN"].str[2]
-clearData["borough"] = clearData["borough"].replace(['M', 'X', 'K', 'Q', 'R'], ['Manhattan', 'Bronx', "Brooklyn", "Queens", "Staten Island"])
+clearData["District"] = clearData["DBN"].str[:3]
+clearData["Number"] = clearData["DBN"].str[3:6]
+clearData["Borough"] = clearData["DBN"].str[2]
+clearData["Borough"] = clearData["Borough"].replace(['M', 'X', 'K', 'Q', 'R'], ['Manhattan', 'Bronx', "Brooklyn", "Queens", "Staten Island"])
 
 clearData["schoolyear"] = clearData["schoolyear"].astype(str)
 clearData["schoolyear"] = clearData["schoolyear"].str[:4]+"-"+clearData["schoolyear"].str[4:8]
@@ -125,13 +125,13 @@ all1 = st.sidebar.checkbox("Select all boroughs")
 if all1:
     boroughSelect = container1.multiselect(
         'Choose boroughs you want to look up:',
-        options=totalRangeData["borough"].unique(),
-        default=totalRangeData["borough"].unique()
+        options=totalRangeData["Borough"].unique(),
+        default=totalRangeData["Borough"].unique()
     )
 else:
     boroughSelect = container1.multiselect(
         'Choose boroughs you want to look up:',
-        options=totalRangeData["borough"].unique(),
+        options=totalRangeData["Borough"].unique(),
         default=[]
     )
 
@@ -140,7 +140,7 @@ if not boroughSelect:
     st.stop()
 
 else:
-    boroughData = totalRangeData.query("borough == @boroughSelect")
+    boroughData = totalRangeData.query("Borough == @boroughSelect")
 
     # st.dataframe(boroughData)
 
@@ -158,13 +158,13 @@ all2 = st.sidebar.checkbox("Select all districts")
 if all2:
     districtSelect = container2.multiselect(
         'Choose districts you want to look up:',
-        options=boroughData["district"].unique(),
-        default=boroughData["district"].unique()
+        options=boroughData["District"].unique(),
+        default=boroughData["District"].unique()
     )
 else:
     districtSelect = container2.multiselect(
         'Choose districts you want to look up:',
-        options=boroughData["district"].unique(),
+        options=boroughData["District"].unique(),
         default=[]
     )
 
@@ -173,7 +173,7 @@ if not districtSelect:
     st.stop()
 
 else:
-    districtData = boroughData.query("district == @districtSelect")
+    districtData = boroughData.query("District == @districtSelect")
 
     # st.dataframe(districtData)
 
@@ -209,7 +209,7 @@ else:
         schoolNameData = districtData.query("Name == @schoolSelect")
         # st.dataframe(schoolNameData)
 
-        schoolNameDataSum = pd.melt(schoolNameData, id_vars=['borough', "Name"],
+        schoolNameDataSum = pd.melt(schoolNameData, id_vars=['Borough', "Name"],
                                     value_vars=["prek","k","grade1","grade2","grade3","grade4","grade5",
                                                 "grade6","grade7","grade8","grade9","grade10","grade11","grade12"],
                                     var_name='Grade',
@@ -221,15 +221,15 @@ else:
 
 
 
-        fig = px.bar(schoolNameDataSum, x='Grade', y='Total Enrollment',hover_data=['Name'], color="borough")
+        fig = px.bar(schoolNameDataSum, x='Grade', y='Total Enrollment',hover_data=['Name'], color="Borough")
         # Edit the layout
         fig.update_layout(title='Total Enrollment in each grade of selected schools in this school year:',
                           )
 
         st.plotly_chart(fig)
 
-        #Race percentage
-        schoolNameDataRace = pd.melt(schoolNameData, id_vars=['district', "Name"],
+        #Race percentagedistrict
+        schoolNameDataRace = pd.melt(schoolNameData, id_vars=['', "Name"],
                                     value_vars=["Asian Number",
                                                 "Black Number",
                                                 "Hispanic Number",
@@ -244,7 +244,7 @@ else:
         st.plotly_chart(fig)
 
         # Gender percentage
-        schoolNameDataGender = pd.melt(schoolNameData, id_vars=['district', "Name"],
+        schoolNameDataGender = pd.melt(schoolNameData, id_vars=['District', "Name"],
                                      value_vars=["Male Number",
                                                  "Female Number",
                                                  ],
@@ -257,7 +257,7 @@ else:
 
         st.plotly_chart(fig)
 
-        schoolNameDataStats = pd.melt(schoolNameData, id_vars=['borough', "Name"],
+        schoolNameDataStats = pd.melt(schoolNameData, id_vars=['Borough', "Name"],
                                       value_vars=["English Languages Learners Number",
                                                   "Special Education Number",
                                                   "Collarborative Team Teaching Number",
@@ -267,7 +267,7 @@ else:
                                       value_name='Number', )
         # st.dataframe(schoolNameDataStats)
 
-        fig = px.bar(schoolNameDataStats, x='Stats', y='Number', hover_data=['Name'], color="borough")
+        fig = px.bar(schoolNameDataStats, x='Stats', y='Number', hover_data=['Name'], color="Borough")
         fig.update_layout(title='Total Enrollment(Other kinds of education) in each grade of selected schools in this school year:',
                           )
 
@@ -277,7 +277,7 @@ else:
 
         #Scatter plot
 
-        schoolNameDataRacePer= pd.melt(schoolNameData, id_vars=["borough", 'district', "Name","Free Lunch/Free and Reduced Lunch Percentage"],
+        schoolNameDataRacePer= pd.melt(schoolNameData, id_vars=["Borough", 'District', "Name","Free Lunch/Free and Reduced Lunch Percentage"],
                                      value_vars=["Asian Percentage",
                                                  "Black Percentage",
                                                  "Hispanic Percentage",
@@ -289,7 +289,7 @@ else:
         fig = px.scatter(schoolNameDataRacePer, x="Race Percentage", y="Free Lunch/Free and Reduced Lunch Percentage",
                          color="Race",
                          symbol="Race",
-                         hover_data=['Name', "borough", "district"])
+                         hover_data=['Name', "Borough", "District"])
         fig.update_yaxes(  # the y-axis is in dollars
             ticksuffix="%", showgrid=True
         )
