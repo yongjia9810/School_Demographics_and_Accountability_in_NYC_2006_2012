@@ -229,7 +229,7 @@ else:
         st.plotly_chart(fig)
 
         #Race percentagedistrict
-        schoolNameDataRace = pd.melt(schoolNameData, id_vars=['', "Name"],
+        schoolNameDataRace = pd.melt(schoolNameData, id_vars=['District', "Name"],
                                     value_vars=["Asian Number",
                                                 "Black Number",
                                                 "Hispanic Number",
