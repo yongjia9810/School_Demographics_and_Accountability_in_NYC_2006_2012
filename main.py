@@ -68,7 +68,7 @@ st.dataframe(clearData)
 # st.write("Total Enrollment")
 totalEnrollment = clearData.groupby('School Year', as_index =False).sum()
 
-st.dataframe(totalEnrollment)
+# st.dataframe(totalEnrollment)
 
 col1, col2 = st.columns(2)
 
@@ -142,7 +142,7 @@ if not boroughSelect:
 else:
     boroughData = totalRangeData.query("borough == @boroughSelect")
 
-    st.dataframe(boroughData)
+    # st.dataframe(boroughData)
 
 
 
@@ -175,7 +175,7 @@ if not districtSelect:
 else:
     districtData = boroughData.query("district == @districtSelect")
 
-    st.dataframe(districtData)
+    # st.dataframe(districtData)
 
 
 
@@ -214,7 +214,7 @@ else:
                                                 "grade6","grade7","grade8","grade9","grade10","grade11","grade12"],
                                     var_name='Grade',
                                     value_name='Total Enrollment',)
-        st.dataframe(schoolNameDataSum)
+        # st.dataframe(schoolNameDataSum)
 
         # schoolNameDataSum = schoolNameDataSum.groupby('Grade', as_index=False).sum()
 
@@ -283,7 +283,7 @@ else:
                                                  "Hispanic Percentage",
                                                  "White Percentage", ],
                                      var_name='Race', value_name='Race Percentage')
-        st.dataframe(schoolNameDataRacePer)
+        # st.dataframe(schoolNameDataRacePer)
 
 
         fig = px.scatter(schoolNameDataRacePer, x="Race Percentage", y="Free Lunch/Free and Reduced Lunch Percentage",
